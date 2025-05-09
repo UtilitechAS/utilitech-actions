@@ -67,11 +67,11 @@ jobs:
           echo "${{ secrets.ACTIONS_SSH_PRIVATE_KEY }}" > private_key && chmod 600 private_key
           scp -o StrictHostKeyChecking=no -i private_key ${{ inputs.file }} actions@${{ inputs.server }}:work/${{ inputs.context }}.jar || exit 1
           DEPLOY_ARGS="-n ${{ inputs.context }} -u ${{ inputs.owner }} -j work/${{ inputs.context }}.jar"
-          if [ -n "${{ inputs.application-yml }}" ]; then
+          if [ ! -z "${{ inputs.application-yml }}" ]; then
             scp -o StrictHostKeyChecking=no -i private_key ${{ inputs.application-yml }} actions@${{ inputs.server }}:work/${{ inputs.context }}.yml || exit 1
             DEPLOY_ARGS="$DEPLOY_ARGS -a work/${{ inputs.context }}.yml"
           fi
-          if [ -n "${{ inputs.application-conf }}" ]; then
+          if [ ! -z "${{ inputs.application-conf }}" ]; then
             scp -o StrictHostKeyChecking=no -i private_key ${{ inputs.application-conf }} actions@${{ inputs.server }}:work/${{ inputs.context }}.conf || exit 1
             DEPLOY_ARGS="$DEPLOY_ARGS -c work/${{ inputs.context }}.conf"
           fi
